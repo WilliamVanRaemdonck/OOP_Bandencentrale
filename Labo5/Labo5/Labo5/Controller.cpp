@@ -94,10 +94,12 @@ int main() {
 	Customer customer1 = { 0, "bob1", "straat1", 'C', "VAT123", 10 };
 	Customer customer2 = { 1, "bob2", "straat2", 'C', "VAT123", 10 };
 
-	array<Article, 50> articlesCustomer1;
-	array<Article, 50> articlesCustomer2;
-	Invoice invoice1 = {customer1, articlesCustomer1 , 50, 10};
-	Invoice invoice2 = { customer2, articlesCustomer2 , 50, 10 };
+	array<Article, MAX_ARTICLES> articlesCustomer1 = {article1};
+	array<Article, MAX_ARTICLES> articlesCustomer2 = {article2};
+	array<int, MAX_ARTICLES> prices1 = { 15 };
+	array<int, MAX_ARTICLES> prices2 = { 20 };
+	Invoice invoice1 = {customer1, articlesCustomer1 , 50, 10, 1, prices1};
+	Invoice invoice2 = { customer2, articlesCustomer2 , 50, 10, 1 , prices2};
 
 	articles.push_back(article1);
 	articles.push_back(article2);
@@ -166,8 +168,10 @@ int main() {
 				changeArticle(articles);
 				break;
 			case 5:
+				printInvoices(invoices);
 				break;
 			case 6:
+				placeOrder(invoices);
 				break;
 			case 7:
 				changeCustomer(customers);

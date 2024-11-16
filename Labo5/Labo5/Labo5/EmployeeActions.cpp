@@ -168,7 +168,6 @@ void deleteCustomer(vector<Customer> customers) {
 
 //----------------
 
-
 void addArticle(vector<Article> articles) {
 	//article
 	int newStock, newDiameter;
@@ -367,3 +366,52 @@ void printListOfArticles(vector<Article> articles) {
 	cout << endl << endl;
 }
 
+void printInvoices(vector<Invoice> invoices) {
+	if (invoices.empty()) {
+		setTextColor(CMD_COLOR_RED);
+		cout << "No invoices available." << endl;
+		setTextColor(CMD_COLOR_WHITE);
+		return;
+	}
+
+	cout << "================ List of Invoices ================" << endl;
+
+	for (const auto& invoice : invoices) {
+		setTextColor(CMD_COLOR_YELLOW);
+		cout << "Customer Name: ";
+		setTextColor(CMD_COLOR_WHITE);
+		cout << invoice.getCustomer().getName() << endl;
+
+		setTextColor(CMD_COLOR_YELLOW);
+		cout << "Customer Address: ";
+		setTextColor(CMD_COLOR_WHITE);
+		cout << invoice.getCustomer().getAddress() << endl;
+
+		setTextColor(CMD_COLOR_YELLOW);
+		cout << "Total Price: ";
+		setTextColor(CMD_COLOR_WHITE);
+		cout << invoice.getPrice() << " EURO" << endl;
+
+		setTextColor(CMD_COLOR_YELLOW);
+		cout << "Discount: ";
+		setTextColor(CMD_COLOR_WHITE);
+		cout << invoice.getDiscount() << "%" << endl;
+
+		setTextColor(CMD_COLOR_YELLOW);
+		cout << "Articles: ";
+		setTextColor(CMD_COLOR_WHITE);
+		const auto& articles = invoice.getArticles();
+		for (size_t i = 0; i < invoice.getArticleCount(); ++i) { // Only iterate up to the articleCount
+			cout << articles[i].getName() << " (ID: " << articles[i].getID() << "), ";
+		}
+		cout << endl;
+
+		cout << "--------------------------------------------------" << endl;
+	}
+
+	cout << "==================================================" << endl << endl;
+}
+
+void placeOrder(vector<Invoice> invoices) {
+
+}

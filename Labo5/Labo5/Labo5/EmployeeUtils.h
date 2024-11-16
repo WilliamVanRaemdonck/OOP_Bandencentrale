@@ -6,6 +6,7 @@
 
 #include "Customer.h"
 #include "Article.h"
+#include "Invoice.h"
 #include "TireCenterUtils.h"
 
 void makeCustomerPrompt(string*, string*, string*, string*, int*);
@@ -23,4 +24,7 @@ void printListOfArticles(vector<Article>);
 void addArticle(vector<Article>);
 void changeArticle(vector<Article>);
 void deleteArticle(vector<Article>);
+
+void printInvoices(vector<Invoice>);
+void placeOrder(vector<Invoice>);
 
