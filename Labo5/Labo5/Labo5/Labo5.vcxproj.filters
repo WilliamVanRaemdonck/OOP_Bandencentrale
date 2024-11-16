@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Source Files\Customer">
+      <UniqueIdentifier>{6fde275e-5dda-4c6e-9a73-0bdecdc92855}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Customer\Company">
+      <UniqueIdentifier>{dd1dbe30-ee9d-432a-a2ff-28bf76952fe5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Invoice">
+      <UniqueIdentifier>{d9dfc4cd-bafe-4cb8-bedb-f5f5c3c6e6d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Article">
+      <UniqueIdentifier>{796d25e6-4f64-445b-9f44-887017b69cc8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Article\Tire">
+      <UniqueIdentifier>{ee3e50a1-fec8-4bb3-9256-da0370158291}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Article\Rim">
+      <UniqueIdentifier>{5b81d5c7-eec8-495f-a8b9-098a45945ba6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Utils">
+      <UniqueIdentifier>{37f21223-5a48-4f1a-8a80-3e8ac967c388}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Controller.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="EmployeeActions.cpp">
+      <Filter>Source Files\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="TireCenterUtils.cpp">
+      <Filter>Source Files\Utils</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Customer.h">
+      <Filter>Source Files\Customer</Filter>
+    </ClInclude>
+    <ClInclude Include="Company.h">
+      <Filter>Source Files\Customer\Company</Filter>
+    </ClInclude>
+    <ClInclude Include="TireCenter.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Invoice.h">
+      <Filter>Source Files\Invoice</Filter>
+    </ClInclude>
+    <ClInclude Include="Article.h">
+      <Filter>Source Files\Article</Filter>
+    </ClInclude>
+    <ClInclude Include="Tire.h">
+      <Filter>Source Files\Article\Tire</Filter>
+    </ClInclude>
+    <ClInclude Include="Rim.h">
+      <Filter>Source Files\Article\Rim</Filter>
+    </ClInclude>
+    <ClInclude Include="EmployeeUtils.h">
+      <Filter>Source Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="TireCenterUtils.h">
+      <Filter>Source Files\Utils</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Employees.txt" />
+  </ItemGroup>
+</Project>
