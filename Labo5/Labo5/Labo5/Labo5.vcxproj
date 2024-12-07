@@ -129,6 +129,7 @@
   <ItemGroup>
     <ClCompile Include="Controller.cpp" />
     <ClCompile Include="EmployeeActions.cpp" />
+    <ClCompile Include="FileProcessing.cpp" />
     <ClCompile Include="TireCenterUtils.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -136,6 +137,7 @@
     <ClInclude Include="Company.h" />
     <ClInclude Include="Customer.h" />
     <ClInclude Include="EmployeeUtils.h" />
+    <ClInclude Include="FileProcessing.h" />
     <ClInclude Include="Invoice.h" />
     <ClInclude Include="Rim.h" />
     <ClInclude Include="Tire.h" />
@@ -143,7 +145,10 @@
     <ClInclude Include="TireCenterUtils.h" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="Articles.txt" />
+    <Text Include="Customers.txt" />
     <Text Include="Employees.txt" />
+    <Text Include="Invoices.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -15,10 +15,10 @@ public:
 	~Company() {}
 
 	//getters
-	string getVAT() {
+	string getVAT() const{
 		return VAT;
 	}
-	int getVolumeDiscount() {
+	int getVolumeDiscount() const {
 		return volumeDiscount;
 	}
 

@@ -1,0 +1,3 @@
+0 bob3 straat1 D VAT456 15
+1 bob2 straat2 C VAT123 10
+2 Daan Straat1 C VAT123 10

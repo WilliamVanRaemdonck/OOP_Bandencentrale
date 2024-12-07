@@ -10,6 +10,7 @@
 
 #include "EmployeeUtils.h"
 #include "TireCenterUtils.h"
+#include "FileProcessing.h"
 
 const char logo[] =
 "  @@@@@@@  @   @@@@@@@     @@@@@@@     @@@@     @@@@@@@@  @      @   @@@@@@@   @@@@@@@   @@@@@@@    \n"
@@ -83,30 +84,10 @@ int main() {
 	}
 	employeesFilep.close();
 
-	//Maak test objecten aan
-	Rim rim1 = {false, "black", 10};
-	Tire tire1 = {10, 10, "120", 'Z'};
-	Article article1 = {0,"article1", "fabricakant1", 100, 10, 50, 'Z', tire1.getWidth(), tire1.getHeight(), tire1.getSpeedIndex(), tire1.getSeason(), rim1.isAluminium(), rim1.getColor(), rim1.getRimWidth()};
-	Rim rim2 = { false, "black", 10 };
-	Tire tire2 = { 10, 10, "120", 'Z' };
-	Article article2 = {1, "article2", "fabricakant1", 100, 10, 50, 'Z', tire2.getWidth(), tire2.getHeight(), tire2.getSpeedIndex(), tire2.getSeason(), rim2.isAluminium(), rim2.getColor(), rim2.getRimWidth() };
-
-	Customer customer1 = { 0, "bob1", "straat1", 'C', "VAT123", 10 };
-	Customer customer2 = { 1, "bob2", "straat2", 'C', "VAT123", 10 };
-
-	array<Article, MAX_ARTICLES> articlesCustomer1 = {article1};
-	array<Article, MAX_ARTICLES> articlesCustomer2 = {article2};
-	array<int, MAX_ARTICLES> prices1 = { 15 };
-	array<int, MAX_ARTICLES> prices2 = { 20 };
-	Invoice invoice1 = {customer1, articlesCustomer1 , 50, 10, 1, prices1};
-	Invoice invoice2 = { customer2, articlesCustomer2 , 50, 10, 1 , prices2};
-
-	articles.push_back(article1);
-	articles.push_back(article2);
-	customers.push_back(customer1);
-	customers.push_back(customer2);
-	invoices.push_back(invoice1);
-	invoices.push_back(invoice2);
+	//read data from files
+	readInvoiceFromFile(&invoices);
+	readArticlesFromFile(&articles);
+	readCustomerFromFile(&customers);
 
 	//main program
 	while (exitProgramFlag)
@@ -142,7 +123,7 @@ int main() {
 				break;
 			case 1:
 				if (userType == "A") {
-					addArticle(articles);
+					addArticle(&articles);
 				}
 				else {
 					cout << "option not available: not an admin" << endl;
@@ -150,7 +131,7 @@ int main() {
 				break;
 			case 2:
 				if (userType == "A") {
-					deleteArticle(articles);
+					deleteArticle(&articles);
 				}
 				else {
 					cout << "option not available: not an admin" << endl;
@@ -158,26 +139,26 @@ int main() {
 				break;
 			case 3:
 				if (userType == "A") {
-					deleteCustomer(customers);
+					deleteCustomer(&customers);
 				}
 				else {
 					cout << "option not available: not an admin" << endl;
 				}
 				break;
 			case 4:
-				changeArticle(articles);
+				changeArticle(&articles);
 				break;
 			case 5:
 				printInvoices(invoices);
 				break;
 			case 6:
-				placeOrder(invoices);
+				placeOrder(&invoices, customers, articles);
 				break;
 			case 7:
-				changeCustomer(customers);
+				changeCustomer(&customers);
 				break;
 			case 8:
-				makeCustomer(customers);
+				makeCustomer(&customers);
 				break;
 
 			default:
@@ -189,12 +170,11 @@ int main() {
 			cout << "Not a Valid employee -> exiting" << endl;
 			exitProgramFlag = 0;
 		}
-
-
 	}
 
 	//clean up and close
 	cout << "Shutting Down" << endl << endl;
+	invoicesFilep.close();
 	employeesFilep.close();
 	articlesFilep.close();
 	customersFilep.close();

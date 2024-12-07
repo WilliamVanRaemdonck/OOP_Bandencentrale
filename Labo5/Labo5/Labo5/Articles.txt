@@ -1,0 +1,3 @@
+0 article1 fabricakant1 100 10 50 Z 0 black 10 10 10 120 Z
+1 article2 fabricakant1 100 10 50 Z 0 black 10 10 10 120 Z
+2 band manu1 50 10 10 S 1 black 10 10 10 S W

@@ -1,4 +1,8 @@
 #include "EmployeeUtils.h"
+#include "FileProcessing.h"
+#include "Invoice.h"
+#include "Customer.h"
+#include "string.h"
 
 void makeCustomerPrompt(string* newCustomerName, string* newCustomerAddress, string* newCustomerType, string* newCompanyVAT, int* newCompanyVolumeDiscount) {
 	setTextColor(CMD_COLOR_CYAN);
@@ -100,7 +104,7 @@ void makeRimPrompt(bool* aluminium, string* color, int* rimWidth) {
 
 //----------------
 
-void makeCustomer(vector<Customer> customers) {
+void makeCustomer(vector<Customer>* customers) {
 	string newCustomerName, newCustomerAddress, newCustomerType, newCompanyVAT;
 	int newCompanyVolumeDiscount;
 	int highestID = 0;
@@ -110,10 +114,10 @@ void makeCustomer(vector<Customer> customers) {
 	makeCustomerPrompt(&newCustomerName, &newCustomerAddress, &newCustomerType, &newCompanyVAT, &newCompanyVolumeDiscount);
 
 	//get highest ID
-	for (int i = 0; i < customers.size(); i++)
+	for (int i = 0; i < customers->size(); i++)
 	{
 		int currentHighestId = 0;
-		currentHighestId = customers[i].getID();
+		currentHighestId = customers->at(i).getID();;
 		if (currentHighestId > highestID) {
 			highestID = currentHighestId;
 		}
@@ -121,12 +125,14 @@ void makeCustomer(vector<Customer> customers) {
 
 	//make and add the customer to the vector
 	Customer newCustomer = { (highestID + 1), newCustomerName, newCustomerAddress, newCustomerType[0], newCompanyVAT, newCompanyVolumeDiscount };
-	customers.push_back(newCustomer);
+	customers->push_back(newCustomer);
 
 	printListOfCustomers(customers);
+
+	writeCustomerToFile(customers);
 }
 
-void changeCustomer(vector<Customer> customers) {
+void changeCustomer(vector<Customer>* customers) {
 	string newCustomerName, newCustomerAddress, newCustomerType, newCompanyVAT;
 	int newCompanyVolumeDiscount;
 	int highestID = 0;
@@ -143,32 +149,36 @@ void changeCustomer(vector<Customer> customers) {
 	makeCustomerPrompt(&newCustomerName, &newCustomerAddress, &newCustomerType, &newCompanyVAT, &newCompanyVolumeDiscount);
 
 	Customer newCustomer = { idToModify, newCustomerName, newCustomerAddress, newCustomerType[0], newCompanyVAT, newCompanyVolumeDiscount };
-	customers[idToModify] = newCustomer;
+	customers->at(idToModify) = newCustomer;
 
 	printListOfCustomers(customers);
+
+	writeCustomerToFile(customers);
 }
 
-void deleteCustomer(vector<Customer> customers) {
+void deleteCustomer(vector<Customer>* customers) {
 	int idToModify;
 
-	for (int i = 0; i < customers.size(); i++)
+	for (int i = 0; i < customers->size(); i++)
 	{
-		cout << customers[i].getID() << "| name: " << customers[i].getName() << endl;
+		cout << customers->at(i).getID() << "| name: " << customers->at(i).getName() << endl;
 	}
 	cout << endl << "Enter ID from customer to delete" << endl;
 
 	cin >> idToModify;
 
-	customers.erase(customers.begin() + idToModify);
+	customers->erase(customers->begin() + idToModify);
 
 	cout << "customer deleted!" << endl;
 
 	printListOfCustomers(customers);
+
+	writeCustomerToFile(customers);
 }
 
 //----------------
 
-void addArticle(vector<Article> articles) {
+void addArticle(vector<Article>* articles) {
 	//article
 	int newStock, newDiameter;
 	char newType;
@@ -191,10 +201,10 @@ void addArticle(vector<Article> articles) {
 	makeTirePrompt(&newTireWidth, &newTireHeight, &newSpeedIndex, &newSeason);
 
 	//get highest ID
-	for (int i = 0; i < articles.size(); i++)
+	for (int i = 0; i < articles->size(); i++)
 	{
 		int currentHighestId = 0;
-		currentHighestId = articles[i].getID();
+		currentHighestId = articles->at(i).getID();
 		if (currentHighestId > highestID) {
 			highestID = currentHighestId;
 		}
@@ -204,12 +214,14 @@ void addArticle(vector<Article> articles) {
 	Rim newRim = {newAluminium, newColor, newRimWidth};
 	Tire newTire = { newTireWidth, newTireHeight, newSpeedIndex, newSeason };
 	Article newArticle = { (highestID + 1), newName, newManufacturer, newStock,newDiameter, newPrice, newType, newTire.getWidth(), newTire.getHeight(), newTire.getSpeedIndex(), newTire.getSeason(), newRim.isAluminium(), newRim.getColor(), newRim.getRimWidth()};
-	articles.push_back(newArticle);
+	articles->push_back(newArticle);
 
 	printListOfArticles(articles);
+
+	writeArticlesToFile(articles);
 }
 
-void changeArticle(vector<Article> articles) {
+void changeArticle(vector<Article>* articles) {
 	//article
 	int newStock, newDiameter;
 	char newType;
@@ -241,33 +253,37 @@ void changeArticle(vector<Article> articles) {
 	Rim newRim = { newAluminium, newColor, newRimWidth };
 	Tire newTire = { newTireWidth, newTireHeight, newSpeedIndex, newSeason };
 	Article newArticle = {idToModify, newName, newManufacturer, newStock,newDiameter, newPrice, newType, newTire.getWidth(), newTire.getHeight(), newTire.getSpeedIndex(), newTire.getSeason(), newRim.isAluminium(), newRim.getColor(), newRim.getRimWidth() };
-	articles[idToModify] = newArticle;
+	articles->at(idToModify) = newArticle;
 
 	printListOfArticles(articles);
+
+	writeArticlesToFile(articles);
 }
 
-void deleteArticle(vector<Article> articles) {
+void deleteArticle(vector<Article>* articles) {
 	int idToDelete;
 
-	for (int i = 0; i < articles.size(); i++)
+	for (int i = 0; i < articles->size(); i++)
 	{
-		cout << articles[i].getID() << "| name: " << articles[i].getName() << endl;
+		cout << articles->at(i).getID() << "| name: " << articles->at(i).getName() << endl;
 	}
 	cout << endl << "Enter ID from article to delete" << endl;
 
 	cin >> idToDelete;
 
-	articles.erase(articles.begin() + idToDelete);
+	articles->erase(articles->begin() + idToDelete);
 
 	cout << "article deleted!" << endl;
 
 	printListOfArticles(articles);
+
+	writeArticlesToFile(articles);
 }
 
 //----------------
 
-void printListOfCustomers(vector<Customer> customers) {
-	if (customers.empty()) {
+void printListOfCustomers(vector<Customer>* customers) {
+	if (customers->empty()) {
 		setTextColor(CMD_COLOR_RED);
 		cout << "No customers available." << std::endl;
 		setTextColor(CMD_COLOR_WHITE);
@@ -276,7 +292,7 @@ void printListOfCustomers(vector<Customer> customers) {
 
 	cout << "================ List of Customers ================" << endl;
 
-	for (const auto& customer : customers) {
+	for (const auto& customer : *customers) {
 		setTextColor(CMD_COLOR_YELLOW);
 		cout << "ID: ";
 		setTextColor(CMD_COLOR_WHITE);
@@ -299,8 +315,8 @@ void printListOfCustomers(vector<Customer> customers) {
 	cout << "==================================================" << endl << endl;
 }
 
-void printListOfArticles(vector<Article> articles) {
-	if (articles.empty()) {
+void printListOfArticles(vector<Article>* articles) {
+	if (articles->empty()) {
 		setTextColor(CMD_COLOR_RED);
 		cout << "No articles available." << std::endl;
 		setTextColor(CMD_COLOR_WHITE);
@@ -309,7 +325,7 @@ void printListOfArticles(vector<Article> articles) {
 
 	cout << endl << "New List of Articles" << endl;
 
-	for (const auto& article : articles) {
+	for (const auto& article : *articles) {
 		setTextColor(CMD_COLOR_YELLOW);
 		cout << "ID: ";
 		setTextColor(CMD_COLOR_WHITE);
@@ -367,16 +383,20 @@ void printListOfArticles(vector<Article> articles) {
 }
 
 void printInvoices(vector<Invoice> invoices) {
+	float totalprice = 0;
+
 	if (invoices.empty()) {
 		setTextColor(CMD_COLOR_RED);
-		cout << "No invoices available." << endl;
+		cout << endl << "================ No Invoices Available ================" << endl;
 		setTextColor(CMD_COLOR_WHITE);
 		return;
 	}
 
-	cout << "================ List of Invoices ================" << endl;
+	setTextColor(CMD_COLOR_CYAN);
+	cout << endl << "===================== List of Invoices =====================" << endl;
 
-	for (const auto& invoice : invoices) {
+	for (auto& invoice : invoices) {
+		// Customer details
 		setTextColor(CMD_COLOR_YELLOW);
 		cout << "Customer Name: ";
 		setTextColor(CMD_COLOR_WHITE);
@@ -387,31 +407,162 @@ void printInvoices(vector<Invoice> invoices) {
 		setTextColor(CMD_COLOR_WHITE);
 		cout << invoice.getCustomer().getAddress() << endl;
 
-		setTextColor(CMD_COLOR_YELLOW);
-		cout << "Total Price: ";
-		setTextColor(CMD_COLOR_WHITE);
-		cout << invoice.getPrice() << " EURO" << endl;
-
+		// Discount
 		setTextColor(CMD_COLOR_YELLOW);
 		cout << "Discount: ";
 		setTextColor(CMD_COLOR_WHITE);
 		cout << invoice.getDiscount() << "%" << endl;
 
+		// Articles
 		setTextColor(CMD_COLOR_YELLOW);
-		cout << "Articles: ";
+		cout << "Articles Ordered: " << endl;
 		setTextColor(CMD_COLOR_WHITE);
-		const auto& articles = invoice.getArticles();
-		for (size_t i = 0; i < invoice.getArticleCount(); ++i) { // Only iterate up to the articleCount
-			cout << articles[i].getName() << " (ID: " << articles[i].getID() << "), ";
+
+		auto& articles = invoice.getArticles();
+		auto& amounts = invoice.getAmounts();
+
+		for (size_t i = 0; i < invoice.getArticleCount(); ++i) {
+			setTextColor(CMD_COLOR_WHITE);
+			cout << "  - ";
+			setTextColor(CMD_COLOR_CYAN);
+			cout << amounts[i] << "x ";
+			setTextColor(CMD_COLOR_WHITE);
+			cout << articles[i].getName();
+			setTextColor(CMD_COLOR_YELLOW);
+			cout << " (ID: ";
+			setTextColor(CMD_COLOR_WHITE);
+			cout << articles[i].getID();
+			setTextColor(CMD_COLOR_YELLOW);
+			cout << ")" << endl;
 		}
 		cout << endl;
 
-		cout << "--------------------------------------------------" << endl;
+		// Total price
+		setTextColor(CMD_COLOR_YELLOW);
+		cout << "Total Price (before discount): ";
+		setTextColor(CMD_COLOR_WHITE);
+
+		totalprice = invoice.calculatePrice();
+		cout << totalprice << " EUR" << endl;
+
+		setTextColor(CMD_COLOR_YELLOW);
+		cout << "Total Price (after discount): ";
+		setTextColor(CMD_COLOR_WHITE);
+
+		totalprice = invoice.calculateDiscount();
+		cout << totalprice << " EUR" << endl;
+
+		setTextColor(CMD_COLOR_YELLOW);
+		cout << "------------------------------------------------------------" << endl;
 	}
 
-	cout << "==================================================" << endl << endl;
+	setTextColor(CMD_COLOR_CYAN);
+	cout << "============================================================" << endl << endl;
 }
 
-void placeOrder(vector<Invoice> invoices) {
+void placeOrder(vector<Invoice>* invoices, vector<Customer> customers, vector<Article> articles) {
+	//make order variables
+	Customer newCustomer;
+	Invoice newInvoice;
+	Article articleToAdd;
+	std::array<Article, MAX_ARTICLES> newInvoiceArticles;
+	std::array<int, MAX_ARTICLES> newAmounts;
+	float newPrice = 0;
+	int newDiscount = 0;
+	int newArticleCount = 0;
+	//function variables
+	int invoiceID = 0;
+	string nextIDToAdd = "0";
+	int newAmountToAdd = 0;
 
+	// Display customers
+	setTextColor(CMD_COLOR_CYAN);
+	cout << endl << "================ List of Available Customers ================" << endl;
+	for (int i = 0; i < customers.size(); i++) {
+		setTextColor(CMD_COLOR_YELLOW);
+		cout << "ID: ";
+		setTextColor(CMD_COLOR_WHITE);
+		cout << customers[i].getID() << " ";
+		setTextColor(CMD_COLOR_YELLOW);
+		cout << "NAME: ";
+		setTextColor(CMD_COLOR_WHITE);
+		cout << customers[i].getName() << endl;
+	}
+	setTextColor(CMD_COLOR_CYAN);
+	cout << "============================================================" << endl;
+	setTextColor(CMD_COLOR_CYAN);
+	cout << endl << "Select a customer ID for the order: ";
+	setTextColor(CMD_COLOR_WHITE);
+	cin >> invoiceID;
+
+	// Find customer for order
+	for (int i = 0; i < customers.size(); i++) {
+		if (invoiceID == customers[i].getID()) {
+			newCustomer = customers[i];
+		}
+	}
+
+	// Add articles to the invoice
+	setTextColor(CMD_COLOR_CYAN);
+	cout << endl << "================ List of Available Articles ================" << endl;
+	cout << "(Enter \"exit\" to stop adding articles)" << endl;
+
+	int index = 0;
+	while (nextIDToAdd != "exit") {
+		// Display articles
+		for (int i = 0; i < articles.size(); i++) {
+			setTextColor(CMD_COLOR_YELLOW);
+			cout << "ID: ";
+			setTextColor(CMD_COLOR_WHITE);
+			cout << articles[i].getID() << " ";
+			setTextColor(CMD_COLOR_YELLOW);
+			cout << "NAME: ";
+			setTextColor(CMD_COLOR_WHITE);
+			cout << articles[i].getName() << endl;
+		}
+		setTextColor(CMD_COLOR_CYAN);
+		cout << endl << "Enter Article ID: ";
+		setTextColor(CMD_COLOR_WHITE);
+		cin >> nextIDToAdd;
+
+		if (nextIDToAdd != "exit") {
+			setTextColor(CMD_COLOR_CYAN);
+			cout << "Enter Quantity: ";
+			setTextColor(CMD_COLOR_WHITE);
+			cin >> newAmountToAdd;
+
+			// Find article and add it to the invoice
+			for (int i = 0; i < articles.size(); i++) {
+				if (nextIDToAdd == std::to_string(articles[i].getID())) {
+					articleToAdd = articles[i];
+				}
+			}
+			newInvoiceArticles[index] = articleToAdd;
+			newInvoice.setArticles(newInvoiceArticles);
+
+			// Add the amounts
+			newAmounts[index] = newAmountToAdd;
+			index++;
+
+			// Update price
+			newPrice += (newAmountToAdd * articleToAdd.getPrice());
+			newArticleCount++;
+		}
+	}
+
+	// Apply discount from customer
+	newDiscount = newCustomer.getVolumeDiscount();
+
+	// Create the new invoice
+	newInvoice = { newCustomer, newInvoiceArticles, newPrice, newDiscount, newArticleCount, newAmounts };
+
+	// Add the invoice to the vector
+	invoices->push_back(newInvoice);
+
+	// Final confirmation
+	setTextColor(CMD_COLOR_GREEN);
+	cout << endl << "Order placed successfully! Invoice has been created." << endl;
+	setTextColor(CMD_COLOR_WHITE);
+
+	writeInvoiceToFile(invoices);
 }

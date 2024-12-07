@@ -7,6 +7,9 @@ using namespace std;
 
 class Customer : public Company {
 public:
+    Customer()
+        : Company("", 0), ID(0), name(""), address(""), type(' ') {}
+
     // Constructor 
     Customer(int idC, string nameC, string addressC, char typeC, string VATC, int volumeDiscountC)
         : Company(VATC, volumeDiscountC), ID(idC), name(nameC), address(addressC), type(typeC) {}

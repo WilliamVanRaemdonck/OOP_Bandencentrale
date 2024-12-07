@@ -34,6 +34,9 @@
     <Filter Include="Source Files\Utils">
       <UniqueIdentifier>{37f21223-5a48-4f1a-8a80-3e8ac967c388}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Utils\FileProcessing">
+      <UniqueIdentifier>{36619ce1-069d-4865-8bd4-ec26f8b227c2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Controller.cpp">
@@ -44,6 +47,9 @@
     </ClCompile>
     <ClCompile Include="TireCenterUtils.cpp">
       <Filter>Source Files\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="FileProcessing.cpp">
+      <Filter>Source Files\Utils\FileProcessing</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -74,8 +80,14 @@
     <ClInclude Include="TireCenterUtils.h">
       <Filter>Source Files\Utils</Filter>
     </ClInclude>
+    <ClInclude Include="FileProcessing.h">
+      <Filter>Source Files\Utils\FileProcessing</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Employees.txt" />
+    <Text Include="Articles.txt" />
+    <Text Include="Customers.txt" />
+    <Text Include="Invoices.txt" />
   </ItemGroup>
 </Project>
