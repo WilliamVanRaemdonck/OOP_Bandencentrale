@@ -2,3 +2,4 @@
 1 bob2 straat2 C VAT123 10 50 10 2 1 article2 50 20 0 article1 50 15 
 2 Daan Straat1 C VAT123 10 2530 10 2 0 article1 50 50 2 band 10 3 
 0 bob3 straat1 D VAT456 15 500 15 1 2 band 10 50 
+3 Jef2 adres 2 VAT123 10 2500 10 1 0 article1 50 50 

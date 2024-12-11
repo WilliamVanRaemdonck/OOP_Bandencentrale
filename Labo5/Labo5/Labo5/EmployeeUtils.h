@@ -27,4 +27,4 @@ void deleteArticle(vector<Article>*);
 
 void printInvoices(vector<Invoice>);
 void placeOrder(vector<Invoice>*, vector<Customer>, vector<Article>);
-
+int updateStock(vector<Article>* ,string, int);

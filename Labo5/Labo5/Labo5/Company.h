@@ -1,8 +1,11 @@
 #pragma once
 #include <stdio.h>
 #include <string>
+#include <iostream>
+#include "TireCenterUtils.h"
 
 using namespace std;
+
 class Company {
 public:
 	// Constructor 
@@ -28,6 +31,19 @@ public:
 	}
 	void setVolumeDiscount(int volumeDiscountS) {
 		volumeDiscount = volumeDiscountS;
+	}
+
+	// Virtual function for polymorphism
+	virtual void displayInfo() const {
+		setTextColor(CMD_COLOR_YELLOW);
+		cout << "Company VAT: ";
+		setTextColor(CMD_COLOR_WHITE);
+		cout << VAT << endl;
+
+		setTextColor(CMD_COLOR_YELLOW);
+		cout << "Volume Discount: ";
+		setTextColor(CMD_COLOR_WHITE);
+		cout << volumeDiscount << "%" << endl;
 	}
 
 private:

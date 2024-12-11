@@ -3,6 +3,10 @@
 #include "Invoice.h"
 #include "Customer.h"
 #include "string.h"
+#include <fstream>
+#include <iostream>
+
+using namespace std;
 
 void makeCustomerPrompt(string* newCustomerName, string* newCustomerAddress, string* newCustomerType, string* newCompanyVAT, int* newCompanyVolumeDiscount) {
 	setTextColor(CMD_COLOR_CYAN);
@@ -108,51 +112,60 @@ void makeCustomer(vector<Customer>* customers) {
 	string newCustomerName, newCustomerAddress, newCustomerType, newCompanyVAT;
 	int newCompanyVolumeDiscount;
 	int highestID = 0;
-	int newCustomerID;
 
-	//prompt
+	// Prompt for customer details
 	makeCustomerPrompt(&newCustomerName, &newCustomerAddress, &newCustomerType, &newCompanyVAT, &newCompanyVolumeDiscount);
 
-	//get highest ID
-	for (int i = 0; i < customers->size(); i++)
-	{
-		int currentHighestId = 0;
-		currentHighestId = customers->at(i).getID();;
+	// Get highest ID
+	for (int i = 0; i < customers->size(); i++) {
+		int currentHighestId = customers->at(i).getID();
 		if (currentHighestId > highestID) {
 			highestID = currentHighestId;
 		}
 	}
 
-	//make and add the customer to the vector
-	Customer newCustomer = { (highestID + 1), newCustomerName, newCustomerAddress, newCustomerType[0], newCompanyVAT, newCompanyVolumeDiscount };
-	customers->push_back(newCustomer);
+	// Dynamically allocate memory for a new Customer
+	Customer* newCustomer = new Customer(highestID + 1, newCustomerName, newCustomerAddress,
+		newCustomerType[0], newCompanyVAT, newCompanyVolumeDiscount);
 
+	// Add the dynamically created Customer to the vector
+	customers->push_back(*newCustomer);
+
+	// Clean up dynamically allocated memory
+	delete newCustomer;
+
+	// Display the list of customers and write to file
 	printListOfCustomers(customers);
-
 	writeCustomerToFile(customers);
 }
 
 void changeCustomer(vector<Customer>* customers) {
 	string newCustomerName, newCustomerAddress, newCustomerType, newCompanyVAT;
 	int newCompanyVolumeDiscount;
-	int highestID = 0;
-	int newCustomerID;
 	int idToModify;
 
+	// Print list of customers
 	printListOfCustomers(customers);
 
-	cout << endl << "Enter ID from customer to modify" << endl;
-
+	// Get the ID of the customer to modify
+	cout << endl << "Enter ID from customer to modify: ";
 	cin >> idToModify;
 
-	//prompt
+	// Prompt for new customer details
 	makeCustomerPrompt(&newCustomerName, &newCustomerAddress, &newCustomerType, &newCompanyVAT, &newCompanyVolumeDiscount);
 
-	Customer newCustomer = { idToModify, newCustomerName, newCustomerAddress, newCustomerType[0], newCompanyVAT, newCompanyVolumeDiscount };
-	customers->at(idToModify) = newCustomer;
+	// Dynamically allocate a new Customer
+	Customer* newCustomer = new Customer(idToModify, newCustomerName, newCustomerAddress,
+		newCustomerType[0], newCompanyVAT, newCompanyVolumeDiscount);
 
+	// Replace the customer in the vector with the new customer
+	customers->at(idToModify) = *newCustomer;
+
+	// Clean up dynamically allocated memory
+	delete newCustomer;
+
+	// Print updated list of customers and write to file
 	printListOfCustomers(customers);
-
 	writeCustomerToFile(customers);
 }
 
@@ -179,84 +192,115 @@ void deleteCustomer(vector<Customer>* customers) {
 //----------------
 
 void addArticle(vector<Article>* articles) {
-	//article
+	// Article details
 	int newStock, newDiameter;
 	char newType;
 	float newPrice;
 	string newName, newManufacturer;
-	//tire
+
+	// Tire details
 	int newTireWidth;
 	int newTireHeight;
 	string newSpeedIndex;
 	char newSeason;
-	//rim
+
+	// Rim details
 	bool newAluminium;
 	string newColor;
 	int newRimWidth;
-	//misc
+
+	// Misc
 	int highestID = 0;
 
+	// Prompt user for details
 	makeArticlePrompt(&newName, &newManufacturer, &newStock, &newDiameter, &newPrice, &newType);
 	makeRimPrompt(&newAluminium, &newColor, &newRimWidth);
 	makeTirePrompt(&newTireWidth, &newTireHeight, &newSpeedIndex, &newSeason);
 
-	//get highest ID
-	for (int i = 0; i < articles->size(); i++)
-	{
-		int currentHighestId = 0;
-		currentHighestId = articles->at(i).getID();
+	// Get highest ID
+	for (int i = 0; i < articles->size(); i++) {
+		int currentHighestId = articles->at(i).getID();
 		if (currentHighestId > highestID) {
 			highestID = currentHighestId;
 		}
 	}
 
-	//make and add the article to the vector
-	Rim newRim = {newAluminium, newColor, newRimWidth};
-	Tire newTire = { newTireWidth, newTireHeight, newSpeedIndex, newSeason };
-	Article newArticle = { (highestID + 1), newName, newManufacturer, newStock,newDiameter, newPrice, newType, newTire.getWidth(), newTire.getHeight(), newTire.getSpeedIndex(), newTire.getSeason(), newRim.isAluminium(), newRim.getColor(), newRim.getRimWidth()};
-	articles->push_back(newArticle);
+	// Dynamically allocate Rim and Tire
+	Rim* newRim = new Rim(newAluminium, newColor, newRimWidth);
+	Tire* newTire = new Tire(newTireWidth, newTireHeight, newSpeedIndex, newSeason);
 
+	// Dynamically allocate Article
+	Article* newArticle = new Article(highestID + 1, newName, newManufacturer, newStock, newDiameter,
+		newPrice, newType, newTire->getWidth(), newTire->getHeight(),
+		newTire->getSpeedIndex(), newTire->getSeason(),
+		newRim->isAluminium(), newRim->getColor(), newRim->getRimWidth());
+
+	// Add the Article to the vector
+	articles->push_back(*newArticle);
+
+	// Clean up dynamically allocated Rim, Tire, and Article
+	delete newRim;
+	delete newTire;
+	delete newArticle;
+
+	// Display updated list and write to file
 	printListOfArticles(articles);
-
 	writeArticlesToFile(articles);
 }
 
 void changeArticle(vector<Article>* articles) {
-	//article
+	// Article details
 	int newStock, newDiameter;
 	char newType;
 	float newPrice;
 	string newName, newManufacturer;
-	//tire
+
+	// Tire details
 	int newTireWidth;
 	int newTireHeight;
 	string newSpeedIndex;
 	char newSeason;
-	//rim
+
+	// Rim details
 	bool newAluminium;
 	string newColor;
 	int newRimWidth;
-	//misc
-	int highestID = 0;
+
+	// Misc
 	int idToModify = 0;
 
+	// Print list of articles
 	printListOfArticles(articles);
 
-	cout << endl << "Enter ID from article to modify" << endl;
+	// Prompt user for ID to modify
+	cout << endl << "Enter ID from article to modify: ";
 	cin >> idToModify;
 
+	// Prompt user for new details
 	makeArticlePrompt(&newName, &newManufacturer, &newStock, &newDiameter, &newPrice, &newType);
 	makeRimPrompt(&newAluminium, &newColor, &newRimWidth);
 	makeTirePrompt(&newTireWidth, &newTireHeight, &newSpeedIndex, &newSeason);
 
-	//make and add the article to the vector
-	Rim newRim = { newAluminium, newColor, newRimWidth };
-	Tire newTire = { newTireWidth, newTireHeight, newSpeedIndex, newSeason };
-	Article newArticle = {idToModify, newName, newManufacturer, newStock,newDiameter, newPrice, newType, newTire.getWidth(), newTire.getHeight(), newTire.getSpeedIndex(), newTire.getSeason(), newRim.isAluminium(), newRim.getColor(), newRim.getRimWidth() };
-	articles->at(idToModify) = newArticle;
+	// Dynamically allocate Rim and Tire
+	Rim* newRim = new Rim(newAluminium, newColor, newRimWidth);
+	Tire* newTire = new Tire(newTireWidth, newTireHeight, newSpeedIndex, newSeason);
 
+	// Dynamically allocate Article
+	Article* newArticle = new Article(idToModify, newName, newManufacturer, newStock, newDiameter,
+		newPrice, newType, newTire->getWidth(), newTire->getHeight(),
+		newTire->getSpeedIndex(), newTire->getSeason(),
+		newRim->isAluminium(), newRim->getColor(), newRim->getRimWidth());
+
+	// Replace the existing Article in the vector
+	articles->at(idToModify) = *newArticle;
+
+	// Clean up dynamically allocated Rim, Tire, and Article
+	delete newRim;
+	delete newTire;
+	delete newArticle;
+
+	// Display updated list and write to file
 	printListOfArticles(articles);
-
 	writeArticlesToFile(articles);
 }
 
@@ -293,22 +337,8 @@ void printListOfCustomers(vector<Customer>* customers) {
 	cout << "================ List of Customers ================" << endl;
 
 	for (const auto& customer : *customers) {
-		setTextColor(CMD_COLOR_YELLOW);
-		cout << "ID: ";
-		setTextColor(CMD_COLOR_WHITE);
-		cout << customer.getID() << endl;
-		setTextColor(CMD_COLOR_YELLOW);
-		cout << "Type: ";
-		setTextColor(CMD_COLOR_WHITE);
-		cout << customer.getType() << endl;
-		setTextColor(CMD_COLOR_YELLOW);
-		cout << "Name: ";
-		setTextColor(CMD_COLOR_WHITE);
-		cout << customer.getName() << endl;
-		setTextColor(CMD_COLOR_YELLOW);
-		cout << "Address: ";
-		setTextColor(CMD_COLOR_WHITE);
-		cout << customer.getAddress() << endl;
+		// Call the displayInfo function from the Customer class
+		customer.displayInfo();  // This will call Customer's overridden displayInfo()
 		cout << "--------------------------------------------------" << endl;
 	}
 
@@ -461,16 +491,15 @@ void printInvoices(vector<Invoice> invoices) {
 }
 
 void placeOrder(vector<Invoice>* invoices, vector<Customer> customers, vector<Article> articles) {
-	//make order variables
-	Customer newCustomer;
-	Invoice newInvoice;
-	Article articleToAdd;
-	std::array<Article, MAX_ARTICLES> newInvoiceArticles;
-	std::array<int, MAX_ARTICLES> newAmounts;
+	Customer* newCustomer = nullptr;
+	Invoice* newInvoice = nullptr;
+	auto* newInvoiceArticles = new std::array<Article, MAX_ARTICLES>;
+	auto* newAmounts = new std::array<int, MAX_ARTICLES>;
 	float newPrice = 0;
 	int newDiscount = 0;
 	int newArticleCount = 0;
-	//function variables
+
+	// Function variables
 	int invoiceID = 0;
 	string nextIDToAdd = "0";
 	int newAmountToAdd = 0;
@@ -498,8 +527,19 @@ void placeOrder(vector<Invoice>* invoices, vector<Customer> customers, vector<Ar
 	// Find customer for order
 	for (int i = 0; i < customers.size(); i++) {
 		if (invoiceID == customers[i].getID()) {
-			newCustomer = customers[i];
+			newCustomer = new Customer(customers[i]);
+			break; // Exit loop once customer is found
 		}
+	}
+
+	// Check if customer was found
+	if (!newCustomer) {
+		setTextColor(CMD_COLOR_RED);
+		cout << "Error: Customer with the given ID not found!" << endl;
+		setTextColor(CMD_COLOR_WHITE);
+		delete newInvoiceArticles;
+		delete newAmounts;
+		return;
 	}
 
 	// Add articles to the invoice
@@ -521,7 +561,7 @@ void placeOrder(vector<Invoice>* invoices, vector<Customer> customers, vector<Ar
 			cout << articles[i].getName() << endl;
 		}
 		setTextColor(CMD_COLOR_CYAN);
-		cout << endl << "Enter Article ID: ";
+		cout << endl << "Enter Article ID or exit: ";
 		setTextColor(CMD_COLOR_WHITE);
 		cin >> nextIDToAdd;
 
@@ -531,33 +571,59 @@ void placeOrder(vector<Invoice>* invoices, vector<Customer> customers, vector<Ar
 			setTextColor(CMD_COLOR_WHITE);
 			cin >> newAmountToAdd;
 
-			// Find article and add it to the invoice
-			for (int i = 0; i < articles.size(); i++) {
-				if (nextIDToAdd == std::to_string(articles[i].getID())) {
-					articleToAdd = articles[i];
-				}
+			//update stock
+			int err = updateStock(&articles, nextIDToAdd, newAmountToAdd);
+			if (err != 0) {
+				cout << "Error not enougf stock available for this item" << endl;
 			}
-			newInvoiceArticles[index] = articleToAdd;
-			newInvoice.setArticles(newInvoiceArticles);
+			else {
+				writeArticlesToFile(&articles);
 
-			// Add the amounts
-			newAmounts[index] = newAmountToAdd;
-			index++;
+				Article* articleToAdd = nullptr;
+				// Find article and add it to the invoice
+				for (int i = 0; i < articles.size(); i++) {
+					if (nextIDToAdd == std::to_string(articles[i].getID())) {
+						articleToAdd = new Article(articles[i]);
+						break; // Exit loop once article is found
+					}
+				}
 
-			// Update price
-			newPrice += (newAmountToAdd * articleToAdd.getPrice());
-			newArticleCount++;
+				if (!articleToAdd) {
+					setTextColor(CMD_COLOR_RED);
+					cout << "Error: Article with the given ID not found!" << endl;
+					setTextColor(CMD_COLOR_WHITE);
+					continue;
+				}
+
+				(*newInvoiceArticles)[index] = *articleToAdd;
+				(*newAmounts)[index] = newAmountToAdd;
+				index++;
+
+				// Update price
+				newPrice += (newAmountToAdd * articleToAdd->getPrice());
+				newArticleCount++;
+
+				// Clean up dynamically allocated Article
+				delete articleToAdd;
+			}
+			
 		}
 	}
 
 	// Apply discount from customer
-	newDiscount = newCustomer.getVolumeDiscount();
+	newDiscount = newCustomer->getVolumeDiscount();
 
-	// Create the new invoice
-	newInvoice = { newCustomer, newInvoiceArticles, newPrice, newDiscount, newArticleCount, newAmounts };
+	// Create the new invoice dynamically
+	newInvoice = new Invoice(*newCustomer, *newInvoiceArticles, newPrice, newDiscount, newArticleCount, *newAmounts);
 
 	// Add the invoice to the vector
-	invoices->push_back(newInvoice);
+	invoices->push_back(*newInvoice);
+
+	// Clean up dynamically allocated memory
+	delete newCustomer;
+	delete newInvoice;
+	delete newInvoiceArticles;
+	delete newAmounts;
 
 	// Final confirmation
 	setTextColor(CMD_COLOR_GREEN);
@@ -565,4 +631,26 @@ void placeOrder(vector<Invoice>* invoices, vector<Customer> customers, vector<Ar
 	setTextColor(CMD_COLOR_WHITE);
 
 	writeInvoiceToFile(invoices);
+}
+
+int updateStock(vector<Article>* articles, string ID, int amount) {
+	// Find the article with the given ID
+	for (auto& article : *articles) {
+		if (to_string(article.getID()) == ID) {
+			// Check if there is sufficient stock
+			if (amount > 0 && article.getStock() < amount) {
+				// Not enough stock for the order
+				return -1; // Error code for insufficient stock
+			}
+			// Update stock (decrease for orders, increase for restocking)
+			article.setStock(article.getStock() - amount);
+			setTextColor(CMD_COLOR_CYAN);
+			cout << "Stock updated successfully for Article ID " << ID << ". New stock: " << article.getStock() << endl;
+			setTextColor(CMD_COLOR_WHITE);
+			return 0; // Success
+		}
+	}
+
+	// If the article was not found
+	return -2; // Error code for article not found
 }
